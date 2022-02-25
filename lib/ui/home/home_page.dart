@@ -44,7 +44,7 @@ class HomePage extends GetView<CounterController> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 4.0, horizontal: 16.0),
                                 child: Text(
-                                  SettingController.to.labelLeftField.text,
+                                  SettingController.to.textLeft,
                                   style: TextStyle(fontSize: 14.0),
                                 ),
                               ),
@@ -113,7 +113,7 @@ class HomePage extends GetView<CounterController> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 4.0, horizontal: 16.0),
                                 child: Text(
-                                  SettingController.to.labelRightField.text,
+                                  SettingController.to.textRight,
                                   style: TextStyle(fontSize: 14.0),
                                 ),
                               ),

@@ -71,7 +71,7 @@ class SettingPage extends GetView<SettingController> {
                                 SizedBox(
                                   width: 80,
                                   child: TextFormField(
-                                    controller: controller.labelLeftField,
+                                    initialValue: controller.textLeft,
                                     keyboardType: TextInputType.name,
                                     textCapitalization:
                                         TextCapitalization.characters,
@@ -84,6 +84,8 @@ class SettingPage extends GetView<SettingController> {
                                       contentPadding: const EdgeInsets.all(8.0),
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (String value) =>
+                                        controller.setTextLeft(value),
                                   ),
                                 )
                               ],
@@ -113,7 +115,7 @@ class SettingPage extends GetView<SettingController> {
                                 SizedBox(
                                   width: 80,
                                   child: TextFormField(
-                                    controller: controller.labelRightField,
+                                    initialValue: controller.textRight,
                                     keyboardType: TextInputType.name,
                                     textCapitalization:
                                         TextCapitalization.characters,
@@ -126,6 +128,8 @@ class SettingPage extends GetView<SettingController> {
                                       contentPadding: const EdgeInsets.all(8.0),
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (String value) =>
+                                        controller.setTextRight(value),
                                   ),
                                 )
                               ],
@@ -216,7 +220,7 @@ class SettingPage extends GetView<SettingController> {
               SizedBox(
                 width: 80,
                 child: TextFormField(
-                  controller: controller.incrementField,
+                  initialValue: controller.textIncrement,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -227,6 +231,8 @@ class SettingPage extends GetView<SettingController> {
                     contentPadding: const EdgeInsets.all(8.0),
                     border: OutlineInputBorder(),
                   ),
+                  onChanged: (String value) =>
+                      controller.setTextIncrement(value),
                 ),
               )
             ],
@@ -255,7 +261,7 @@ class SettingPage extends GetView<SettingController> {
                       child: SizedBox(
                         width: 80,
                         child: TextFormField(
-                          controller: controller.limitField,
+                          initialValue: controller.textLimit,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -266,6 +272,8 @@ class SettingPage extends GetView<SettingController> {
                             contentPadding: const EdgeInsets.all(8.0),
                             border: OutlineInputBorder(),
                           ),
+                          onChanged: (String value) =>
+                              controller.setTextLimit(value),
                         ),
                       ),
                     ),

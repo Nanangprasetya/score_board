@@ -8,10 +8,10 @@ class CounterController extends GetxController {
   static CounterController get to => Get.find();
   LocalStorageService _service = LocalStorageService();
 
-  final _localCountRight = "localCountRight";
-  final _localCountLeft = "localCountLeft";
-  final _localWinRight = "localWinRight";
-  final _localWinLeft = "localWinLeft";
+  String _localCountRight = "localCountRight";
+  String _localCountLeft = "localCountLeft";
+  String _localWinRight = "localWinRight";
+  String _localWinLeft = "localWinLeft";
 
   /// Private declaration
   final _countRight = 0.obs;
@@ -42,18 +42,17 @@ class CounterController extends GetxController {
 
   @override
   void onInit() {
-    _getCount(CountType.RIGHT, _countRight.value, _isWinRight.value);
-    _getCount(CountType.LEFT, _countLeft.value, _isWinLeft.value);
+    _initLocal(CountType.RIGHT, _countRight.value, _isWinRight.value);
+    _initLocal(CountType.LEFT, _countLeft.value, _isWinLeft.value);
     super.onInit();
   }
 
   Future<void> _increment(CountType countType) async {
-    final _incrementInit = SettingController.to.incrementField.text;
-    final _limitInit = SettingController.to.limitField.text;
+    final _incrementInit = SettingController.to.textIncrement;
+    final _limitInit = SettingController.to.textLimit;
 
     if (countType == CountType.RIGHT) {
-      if (_countRight.value ==
-          int.parse(_limitInit) - int.parse(_incrementInit)) {
+      if (_countRight.value == int.parse(_limitInit) - int.parse(_incrementInit)) {
         _isWinRight.value = true;
         _service.setBool(_localWinRight, _isWinRight.value);
       } else {
@@ -61,8 +60,7 @@ class CounterController extends GetxController {
         _service.setInt(_localCountRight, _countRight.value);
       }
     } else {
-      if (_countLeft.value ==
-          int.parse(_limitInit) - int.parse(_incrementInit)) {
+      if (_countLeft.value == int.parse(_limitInit) - int.parse(_incrementInit)) {
         _isWinLeft.value = true;
         _service.setBool(_localWinLeft, _isWinLeft.value);
       } else {
@@ -75,7 +73,7 @@ class CounterController extends GetxController {
   }
 
   void _decrement(CountType countType) {
-    final _incrementInit = SettingController.to.incrementField.text;
+    final _incrementInit = SettingController.to.textIncrement;
     if (countType == CountType.RIGHT) {
       if (_countRight > 0) {
         _countRight.value -= int.parse(_incrementInit);
@@ -106,25 +104,33 @@ class CounterController extends GetxController {
     update();
   }
 
-  Future<void> _getCount(CountType countType, int count, bool win) async {
+  Future<void> _initLocal(CountType countType, int count, bool win) async {
     if (countType == CountType.RIGHT) {
       final _count = await _service.getInt(_localCountRight);
       final _win = await _service.getBool(_localWinRight);
-      if (_count == null && _win == null) {
+      if (_count == null) {
         _service.setInt(_localCountRight, count);
-        _service.setBool(_localCountRight, win);
       } else {
         _countRight.value = _count;
+      }
+
+      if (_win == null) {
+        _service.setBool(_localCountRight, win);
+      } else {
         _isWinRight.value = _win;
       }
     } else {
       final _count = await _service.getInt(_localCountLeft);
       final _win = await _service.getBool(_localWinLeft);
-      if (_count == null && _win == null) {
+      if (_count == null) {
         _service.setInt(_localCountLeft, count);
-        _service.setBool(_localCountLeft, win);
       } else {
         _countLeft.value = _count;
+      }
+
+      if(_win == null) {
+        _service.setBool(_localCountLeft, win);
+      }else {
         _isWinLeft.value = _win;
       }
     }

@@ -45,6 +45,23 @@ class LocalStorageService {
     }
   }
 
+  Future<void> setString(String key, String value) async {
+    await getSharedPreferences();
+    _prefs.setString(key, value);
+  }
+
+  Future<String> getString(String key) async {
+    try {
+      await getSharedPreferences();
+
+      final data = _prefs.getString(key);
+      return data;
+    } catch (e) {
+      print(e);
+      return "";
+    }
+  }
+
   Future<bool> remove(String key) async {
     await getSharedPreferences();
 
