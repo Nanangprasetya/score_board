@@ -10,6 +10,7 @@ class AppColors {
   static const Color blue = Color(0xFF0A84FF);
   static const Color indigo = Color(0xFF5E5CE6);
   static const Color purple = Color(0xFFBF5AF2);
+  static const Color greenDark = Color(0xFF34C759);
   
   static const Color success = Colors.green;
   static const Color alert = Colors.orange;

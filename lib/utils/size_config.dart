@@ -6,11 +6,6 @@ class SizeConfig {
   static double _safeAreaHorizontal;
   static double _safeAreaVertical;
 
-  static bool _isPortrait;
-  static bool _isLandscape;
-  static bool _isTablet;
-  static bool _isPhone;
-
   static double screenWidth;
   static double screenHeight;
   static double heightMultiplier;
@@ -30,9 +25,6 @@ class SizeConfig {
         _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
     widthMultiplier = (screenWidth - _safeAreaHorizontal) / 100;
     heightMultiplier = (screenHeight - _safeAreaVertical) / 100;
-    
-    _isPortrait =  _mediaQueryData.orientation==Orientation.portrait;
-    _isLandscape =  _mediaQueryData.orientation==Orientation.landscape;
 
   }
 }

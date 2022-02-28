@@ -1,8 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:score_board/core/controller/counter_controller.dart';
 import 'package:score_board/core/controller/home_controller.dart';
 import 'package:score_board/core/controller/setting_controller.dart';
+import 'package:score_board/core/controller/timer_controller.dart';
 import 'package:score_board/utils/colors.dart';
 import 'package:score_board/utils/size_config.dart';
 
@@ -24,7 +26,9 @@ class HomePage extends GetView<CounterController> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      onTap: () => !homeCountroller.isEditScore
+                      onTap: () => (!homeCountroller.isEditScore) &&
+                              (!controller.isWinLeft) &&
+                              (!homeCountroller.isWinner)
                           ? controller.increment(CountType.LEFT)
                           : {},
                       child: Container(
@@ -50,11 +54,14 @@ class HomePage extends GetView<CounterController> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              controller.isWinLeft ? "WIN" : controller.countLeft.toString(),
+                            AutoSizeText(
+                              controller.countLeft.toString(),
+                              presetFontSizes: [180, 110, 80],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: controller.isWinLeft ? 140 :180,
                                 fontWeight: FontWeight.w500,
+                                color: AppColors.text1,
                               ),
                             ),
                             Visibility(
@@ -93,7 +100,9 @@ class HomePage extends GetView<CounterController> {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () => !homeCountroller.isEditScore
+                      onTap: () => (!homeCountroller.isEditScore) &&
+                              (!controller.isWinRight) &&
+                              (!homeCountroller.isWinner)
                           ? controller.increment(CountType.RIGHT)
                           : {},
                       child: Container(
@@ -119,11 +128,14 @@ class HomePage extends GetView<CounterController> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              controller.isWinRight ? "WIN" : controller.countRight.toString(),
+                            AutoSizeText(
+                              controller.countRight.toString(),
+                              presetFontSizes: [180, 110, 80],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: controller.isWinRight ? 140 :180,
                                 fontWeight: FontWeight.w500,
+                                color: AppColors.text1,
                               ),
                             ),
                             Visibility(
@@ -188,14 +200,16 @@ class HomePage extends GetView<CounterController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      tooltip: "Pengaturan",
-                      icon: Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                      ),
-                      onPressed: () => Get.toNamed('/settingPage'),
-                    ),
+                    !homeCountroller.isWinner
+                        ? IconButton(
+                            tooltip: "setting".tr,
+                            icon: Icon(
+                              Icons.settings,
+                              color: Colors.white,
+                            ),
+                            onPressed: () => Get.toNamed('/settingPage'),
+                          )
+                        : SizedBox(height: 28),
                     Visibility(
                       visible: SettingController.to.isTimerBoard,
                       child: Container(
@@ -206,21 +220,23 @@ class HomePage extends GetView<CounterController> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 10.0),
                         child: Text(
-                          "01:32:42",
-                          style: TextStyle(fontSize: 12.0),
+                          TimerController.to.elapsedTime.toString(),
+                          style: TextStyle(fontSize: 14.0),
                         ),
                       ),
                     ),
-                    IconButton(
-                      tooltip: "Edit Score",
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        homeCountroller.setIsEditScore(true);
-                      },
-                    ),
+                    !homeCountroller.isWinner
+                        ? IconButton(
+                            tooltip: "edit.score".tr,
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              homeCountroller.setIsEditScore(true);
+                            },
+                          )
+                        : SizedBox(height: 48),
                   ],
                 ),
               ),
@@ -237,14 +253,17 @@ class HomePage extends GetView<CounterController> {
                     SizedBox(width: 52),
                     Row(
                       children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Start",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
+                        SizedBox(
+                          width: 80,
+                          child: TextButton(
+                            onPressed: () => TimerController.to.start(),
+                            child: Text(
+                              "start".tr,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ),
                         ),
@@ -256,14 +275,17 @@ class HomePage extends GetView<CounterController> {
                             thickness: 1,
                           ),
                         ),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Stop",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
+                        SizedBox(
+                          width: 80,
+                          child: TextButton(
+                            onPressed: () => TimerController.to.stop(),
+                            child: Text(
+                              "stop".tr,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ),
                         ),
@@ -272,11 +294,15 @@ class HomePage extends GetView<CounterController> {
                     SizedBox(
                       width: 52,
                       child: TextButton(
-                        onPressed: () => controller.reset(),
+                        onPressed: () {
+                          controller.reset();
+                          TimerController.to.reset();
+                          homeCountroller.setIsWinner(false);
+                        },
                         child: Text(
-                          "Reset",
+                          "reset".tr,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
                           ),
@@ -284,6 +310,41 @@ class HomePage extends GetView<CounterController> {
                       ),
                     )
                   ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: Visibility(
+                visible: homeCountroller.isWinner,
+                child: Container(
+                  width: double.infinity,
+                  height: SizeConfig.widthMultiplier * 8,
+                  color: AppColors.greenDark,
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(width: 48),
+                        Text(
+                          controller.messageWinner.tr,
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 23,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => homeCountroller.setIsWinner(false),
+                          icon: Icon(Icons.close),
+                          color: AppColors.white,
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
