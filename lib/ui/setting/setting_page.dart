@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:score_board/core/controller/ads_controller.dart';
 import 'package:score_board/core/controller/setting_controller.dart';
 import 'package:score_board/utils/colors.dart';
 import 'package:score_board/utils/field_length.dart';
@@ -8,233 +10,299 @@ import 'package:score_board/utils/images.dart';
 import 'package:score_board/utils/size_config.dart';
 import 'package:score_board/widget/switch_icon.dart';
 
-class SettingPage extends GetView<SettingController> {
+class SettingPage extends StatefulWidget {
+  SettingPage({Key key}) : super(key: key);
+
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  @override
+  void initState() {
+    AdsController.to.initBannerAd();
+    AdsController.to.createRewardedAd();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-  print(controller.indexSwitch);
     SizeConfig().init(context);
-    return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: Text("setting".tr),
-          actions: [
-            TextButton(
-              onPressed: () => controller.resetAll(),
-              child: Text(
-                "reset".tr,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.normal,
+    return GetBuilder<AdsController>(builder: (adsController) {
+      return GetX<SettingController>(
+        builder: (controller) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            title: Text("setting".tr),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  //TODO add delay duration 1 second because rewardedAd need time to load.
+                  Future.delayed(Duration(seconds: 1))
+                      .then((value) => adsController.showRewardedAd());
+                  controller.resetAll();
+                },
+                child: Text(
+                  "reset".tr,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        body: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
+            ],
+          ),
+          body: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                bottom: 0,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SwitchListTile(
-                      title: Text(
-                        "label.board".tr,
-                        style: TextStyle(fontSize: 14.0),
-                      ),
-                      value: controller.isLabelBoard,
-                      onChanged: (bool i) => controller.setLabelBoard(i),
-                    ),
-                    Visibility(
-                      visible: controller.isLabelBoard,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    Expanded(
+                      child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    text: "text".tr,
-                                    children: [
-                                      TextSpan(
-                                        text: "left".tr,
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: controller.labelLeftBoardColor,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  style: TextStyle(fontSize: 14.0),
-                                ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Form(
-                                    key: controller.keyTextLeft,
-                                    child: TextFormField(
-                                      initialValue: controller.textLeft,
-                                      autovalidateMode: AutovalidateMode.always,
-                                      autocorrect: true,
-                                      keyboardType: TextInputType.name,
-                                      textCapitalization:
-                                          TextCapitalization.characters,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 12.0),
-                                      decoration: InputDecoration(
-                                        isDense: true,
-                                        contentPadding:
-                                            const EdgeInsets.all(8.0),
-                                        border: OutlineInputBorder(),
-                                      ),
-                                      validator: (i) {
-                                        if (i.isEmpty) {
-                                          return "empty.value".tr;
-                                        }
-                                        if (i.length > FieldLength.maxLabel) {
-                                          return  'max'.tr + "${FieldLength.maxLabel}";
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (String value) =>
-                                          controller.setTextLeft(value),
-                                    ),
-                                  ),
-                                )
-                              ],
+                            SwitchListTile(
+                              title: Text(
+                                "label.board".tr,
+                                style: TextStyle(fontSize: 14.0),
+                              ),
+                              value: controller.isLabelBoard,
+                              onChanged: (bool i) =>
+                                  controller.setLabelBoard(i),
                             ),
-                            SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    text: "text".tr,
-                                    children: [
-                                      TextSpan(
-                                        text: "right".tr,
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          color:
-                                              controller.labelRightBoardColor,
-                                          fontWeight: FontWeight.w500,
+                            Visibility(
+                              visible: controller.isLabelBoard,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text.rich(
+                                          TextSpan(
+                                            text: "text".tr,
+                                            children: [
+                                              TextSpan(
+                                                text: "left".tr,
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: controller
+                                                      .labelLeftBoardColor,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          style: TextStyle(fontSize: 14.0),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  style: TextStyle(fontSize: 14.0),
+                                        SizedBox(
+                                          width: 100,
+                                          child: Form(
+                                            key: controller.keyTextLeft,
+                                            child: TextFormField(
+                                              initialValue: controller.textLeft,
+                                              autovalidateMode:
+                                                  AutovalidateMode.always,
+                                              autocorrect: true,
+                                              keyboardType: TextInputType.name,
+                                              textCapitalization:
+                                                  TextCapitalization.characters,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(fontSize: 12.0),
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.all(8.0),
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              validator: (i) {
+                                                if (i.isEmpty) {
+                                                  return "empty.value".tr;
+                                                }
+                                                if (i.length >
+                                                    FieldLength.maxLabel) {
+                                                  return 'max'.tr +
+                                                      "${FieldLength.maxLabel}";
+                                                }
+                                                return null;
+                                              },
+                                              onChanged: (String value) =>
+                                                  controller.setTextLeft(value),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 16),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text.rich(
+                                          TextSpan(
+                                            text: "text".tr,
+                                            children: [
+                                              TextSpan(
+                                                text: "right".tr,
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: controller
+                                                      .labelRightBoardColor,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          style: TextStyle(fontSize: 14.0),
+                                        ),
+                                        SizedBox(
+                                          width: 100,
+                                          child: Form(
+                                            key: controller.keyTextRight,
+                                            child: TextFormField(
+                                              initialValue:
+                                                  controller.textRight,
+                                              autovalidateMode:
+                                                  AutovalidateMode.always,
+                                              autocorrect: true,
+                                              keyboardType: TextInputType.name,
+                                              textCapitalization:
+                                                  TextCapitalization.characters,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                              ),
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.all(8.0),
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              validator: (i) {
+                                                if (i.isEmpty) {
+                                                  return "empty.value".tr;
+                                                }
+                                                if (i.length >
+                                                    FieldLength.maxLabel) {
+                                                  return 'max'.tr +
+                                                      "${FieldLength.maxLabel}";
+                                                }
+                                                return null;
+                                              },
+                                              onChanged: (String value) =>
+                                                  controller
+                                                      .setTextRight(value),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Form(
-                                    key: controller.keyTextRight,
-                                    child: TextFormField(
-                                      initialValue: controller.textRight,
-                                      autovalidateMode: AutovalidateMode.always,
-                                      autocorrect: true,
-                                      keyboardType: TextInputType.name,
-                                      textCapitalization:
-                                          TextCapitalization.characters,
-                                      textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SwitchListTile(
+                              title: Text.rich(
+                                TextSpan(
+                                  text: "color.board".tr,
+                                  children: [
+                                    TextSpan(
+                                      text: controller.isPositionBoard
+                                          ? "right".tr
+                                          : "left".tr,
                                       style: TextStyle(
-                                        fontSize: 12.0,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                      decoration: InputDecoration(
-                                        isDense: true,
-                                        contentPadding:
-                                            const EdgeInsets.all(8.0),
-                                        border: OutlineInputBorder(),
-                                      ),
-                                      validator: (i) {
-                                        if (i.isEmpty) {
-                                          return "empty.value".tr;
-                                        }
-                                        if (i.length > FieldLength.maxLabel) {
-                                          return 'max'.tr + "${FieldLength.maxLabel}";
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (String value) =>
-                                          controller.setTextRight(value),
-                                    ),
-                                  ),
-                                )
-                              ],
+                                    )
+                                  ],
+                                ),
+                                style: TextStyle(fontSize: 14.0),
+                              ),
+                              value: controller.isPositionBoard,
+                              onChanged: (bool i) =>
+                                  controller.setPositionBoard(i),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SwitchListTile(
-                      title: Text.rich(
-                        TextSpan(
-                          text: "color.board".tr,
-                          children: [
-                            TextSpan(
-                              text:
-                                  controller.isPositionBoard ? "right".tr : "left".tr,
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: SizedBox(
+                                width: SizeConfig.screenWidth / 4,
+                                child: Wrap(
+                                  children: ColorBoard.listColorBoard.map((e) {
+                                    return InkWell(
+                                      child: Container(
+                                        margin: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(1.5),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.black,
+                                        ),
+                                        child: Container(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: e.color,
+                                          ),
+                                          child:
+                                              _dotColor(controller, e.idColor),
+                                        ),
+                                      ),
+                                      onTap: () =>
+                                          controller.setColorBoard(e.color),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             )
                           ],
                         ),
-                        style: TextStyle(fontSize: 14.0),
                       ),
-                      value: controller.isPositionBoard,
-                      onChanged: (bool i) => controller.setPositionBoard(i),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: SizedBox(
-                        width: SizeConfig.screenWidth / 4,
-                        child: Wrap(
-                          children: ColorBoard.listColorBoard.map((e) {
-                            return InkWell(
-                              child: Container(
-                                margin: const EdgeInsets.all(10.0),
-                                padding: const EdgeInsets.all(1.5),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.black,
-                                ),
-                                child: Container(
-                                  width: 20.0,
-                                  height: 20.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: e.color,
-                                  ),
-                                  child: _dotColor(controller, e.idColor),
-                                ),
-                              ),
-                              onTap: () => controller.setColorBoard(e.color),
-                            );
-                          }).toList(),
-                        ),
+                    VerticalDivider(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: _rightBody(controller),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-            ),
-            VerticalDivider(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: _rightBody(controller),
-              ),
-            ),
-          ],
+              Positioned(
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: adsController.isBannerAdReady
+                    ? SizedBox(
+                        width:
+                            adsController.bannerAdWidget.size.width.toDouble(),
+                        height:
+                            adsController.bannerAdWidget.size.height.toDouble(),
+                        child: AdWidget(
+                          ad: adsController.bannerAdWidget,
+                        ),
+                      )
+                    : Container(),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _rightBody(SettingController controller) {
@@ -273,7 +341,7 @@ class SettingPage extends GetView<SettingController> {
                         return "empty.value".tr;
                       }
                       if (i.length > FieldLength.maxIncrement) {
-                        return  "max".tr + "${FieldLength.maxIncrement}";
+                        return "max".tr + "${FieldLength.maxIncrement}";
                       }
                       return null;
                     },
@@ -351,7 +419,6 @@ class SettingPage extends GetView<SettingController> {
           ),
           value: controller.isTimerBoard,
           onChanged: (bool i) {
-            print(i);
             controller.setTimerBoard(i);
           },
         ),

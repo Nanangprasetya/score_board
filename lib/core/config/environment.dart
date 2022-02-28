@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:score_board/main.dart';
 
 abstract class Environment {
@@ -13,6 +14,7 @@ abstract class Environment {
   Environment() {
     value = this;
     WidgetsFlutterBinding.ensureInitialized();
+    MobileAds.instance.initialize();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft])
         .then((_) {

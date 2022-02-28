@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
         primaryColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      debugShowCheckedModeBanner: Environment.value.printResponse,
+      debugShowCheckedModeBanner: Environment.value.debug,
       initialRoute: '/',
       getPages: routes,
     );

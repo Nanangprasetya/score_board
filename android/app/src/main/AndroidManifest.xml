@@ -9,6 +9,10 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Score Board"
         android:icon="@mipmap/ic_launcher">
+        <!-- android:value="ca-app-pub-3940256099942544~3347511713"/> -->
+        <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-5016731169687704~7729470144"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

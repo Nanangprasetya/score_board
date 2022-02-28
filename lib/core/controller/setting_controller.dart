@@ -20,7 +20,6 @@ class SettingController extends GetxController {
   String _localLabelLeftField = "localLabelLeftField";
   String _localIncrementField = "localIncrementField";
   String _localLimitField = "localLimitField";
-  String _localLocalization = "localLocalization";
 
   GlobalKey<FormState> keyTextRight = GlobalKey<FormState>();
   GlobalKey<FormState> keyTextLeft = GlobalKey<FormState>();
