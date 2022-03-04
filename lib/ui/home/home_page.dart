@@ -1,12 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:score_board/core/controller/ads_controller.dart';
 import 'package:score_board/core/controller/counter_controller.dart';
-import 'package:score_board/core/controller/home_controller.dart';
 import 'package:score_board/core/controller/setting_controller.dart';
 import 'package:score_board/core/controller/timer_controller.dart';
 import 'package:score_board/utils/colors.dart';
+import 'package:score_board/utils/images.dart';
 import 'package:score_board/utils/size_config.dart';
+import 'package:score_board/widget/label_triangle.dart';
 
 class HomePage extends GetView<CounterController> {
   @override
@@ -14,10 +17,10 @@ class HomePage extends GetView<CounterController> {
     SizeConfig().init(context);
 
     return Scaffold(
-      body: GetX<HomeController>(
-        builder: (HomeController homeCountroller) => Stack(
-          children: [
-            Positioned(
+      body: Stack(
+        children: [
+          Obx(
+            () => Positioned(
               top: 0,
               right: 0,
               left: 0,
@@ -26,9 +29,9 @@ class HomePage extends GetView<CounterController> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      onTap: () => (!homeCountroller.isEditScore) &&
+                      onTap: () => (!controller.isEditScore) &&
                               (!controller.isWinLeft) &&
-                              (!homeCountroller.isWinner)
+                              (!controller.isWinner)
                           ? controller.increment(CountType.LEFT)
                           : {},
                       child: Container(
@@ -46,7 +49,9 @@ class HomePage extends GetView<CounterController> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 16.0),
+                                  vertical: 4.0,
+                                  horizontal: 16.0,
+                                ),
                                 child: Text(
                                   SettingController.to.textLeft,
                                   style: TextStyle(fontSize: 14.0),
@@ -56,7 +61,7 @@ class HomePage extends GetView<CounterController> {
                             SizedBox(height: 10),
                             AutoSizeText(
                               controller.countLeft.toString(),
-                              presetFontSizes: [180, 110, 80],
+                              presetFontSizes: SettingController.to.lstDigitSize,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -65,7 +70,7 @@ class HomePage extends GetView<CounterController> {
                               ),
                             ),
                             Visibility(
-                              visible: homeCountroller.isEditScore,
+                              visible: controller.isEditScore,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: ToggleButtons(
@@ -100,9 +105,9 @@ class HomePage extends GetView<CounterController> {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () => (!homeCountroller.isEditScore) &&
+                      onTap: () => (!controller.isEditScore) &&
                               (!controller.isWinRight) &&
-                              (!homeCountroller.isWinner)
+                              (!controller.isWinner)
                           ? controller.increment(CountType.RIGHT)
                           : {},
                       child: Container(
@@ -120,7 +125,9 @@ class HomePage extends GetView<CounterController> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 16.0),
+                                  vertical: 4.0,
+                                  horizontal: 16.0,
+                                ),
                                 child: Text(
                                   SettingController.to.textRight,
                                   style: TextStyle(fontSize: 14.0),
@@ -130,7 +137,7 @@ class HomePage extends GetView<CounterController> {
                             SizedBox(height: 10),
                             AutoSizeText(
                               controller.countRight.toString(),
-                              presetFontSizes: [180, 110, 80],
+                              presetFontSizes: SettingController.to.lstDigitSize,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -139,7 +146,7 @@ class HomePage extends GetView<CounterController> {
                               ),
                             ),
                             Visibility(
-                              visible: homeCountroller.isEditScore,
+                              visible: controller.isEditScore,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: ToggleButtons(
@@ -175,32 +182,61 @@ class HomePage extends GetView<CounterController> {
                 ],
               ),
             ),
-            Positioned(
+          ),
+          GetBuilder<AdsController>(
+            builder: (adsController) {
+              return Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                child: adsController.isBannerAdReady &&
+                        CounterController.to.isEditScore
+                    ? StatefulBuilder(
+                        builder: (context, state) {
+                          return SizedBox(
+                            width: adsController.bannerAdWidget.size.width
+                                .toDouble(),
+                            height: adsController.bannerAdWidget.size.height
+                                .toDouble(),
+                            child: AdWidget(
+                              ad: adsController.bannerAdWidget,
+                            ),
+                          );
+                        },
+                      )
+                    : Container(),
+              );
+            },
+          ),
+          Obx(
+            () => Positioned(
               top: 8,
               left: 8,
               child: Visibility(
-                visible: homeCountroller.isEditScore,
+                visible: controller.isEditScore,
                 child: IconButton(
                   icon: Icon(
                     Icons.close,
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    homeCountroller.setIsEditScore(false);
+                    controller.setIsEditScore(false);
                   },
                 ),
               ),
             ),
-            Positioned(
+          ),
+          Obx(
+            () => Positioned(
               top: 8,
               right: 8,
               left: 8,
               child: Visibility(
-                visible: !homeCountroller.isEditScore,
+                visible: !controller.isEditScore,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    !homeCountroller.isWinner
+                    !controller.isWinner
                         ? IconButton(
                             tooltip: "setting".tr,
                             icon: Icon(
@@ -218,14 +254,16 @@ class HomePage extends GetView<CounterController> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 10.0),
+                          vertical: 4.0,
+                          horizontal: 10.0,
+                        ),
                         child: Text(
                           TimerController.to.elapsedTime.toString(),
                           style: TextStyle(fontSize: 14.0),
                         ),
                       ),
                     ),
-                    !homeCountroller.isWinner
+                    !controller.isWinner
                         ? IconButton(
                             tooltip: "edit.score".tr,
                             icon: Icon(
@@ -233,7 +271,7 @@ class HomePage extends GetView<CounterController> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              homeCountroller.setIsEditScore(true);
+                              controller.setIsEditScore(true);
                             },
                           )
                         : SizedBox(height: 48),
@@ -241,14 +279,17 @@ class HomePage extends GetView<CounterController> {
                 ),
               ),
             ),
-            Positioned(
+          ),
+          Obx(
+            () => Positioned(
               bottom: 8,
               right: 8,
               left: 8,
               child: Visibility(
-                visible: !homeCountroller.isEditScore,
+                visible: !controller.isEditScore,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(width: 52),
                     Row(
@@ -297,7 +338,7 @@ class HomePage extends GetView<CounterController> {
                         onPressed: () {
                           controller.reset();
                           TimerController.to.reset();
-                          homeCountroller.setIsWinner(false);
+                          controller.setIsWinner(false);
                         },
                         child: Text(
                           "reset".tr,
@@ -313,12 +354,14 @@ class HomePage extends GetView<CounterController> {
                 ),
               ),
             ),
-            Positioned(
+          ),
+          Obx(
+            () => Positioned(
               bottom: 0,
               right: 0,
               left: 0,
               child: Visibility(
-                visible: homeCountroller.isWinner,
+                visible: controller.isWinner,
                 child: Container(
                   width: double.infinity,
                   height: SizeConfig.widthMultiplier * 8,
@@ -338,7 +381,7 @@ class HomePage extends GetView<CounterController> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () => homeCountroller.setIsWinner(false),
+                          onPressed: () => controller.setIsWinner(false),
                           icon: Icon(Icons.close),
                           color: AppColors.white,
                         )
@@ -348,8 +391,16 @@ class HomePage extends GetView<CounterController> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: LabelTriangle(
+              color: AppColors.label,
+              child: Image.asset(AppImages.label_ads),
+            ),
+          ),
+        ],
       ),
     );
   }

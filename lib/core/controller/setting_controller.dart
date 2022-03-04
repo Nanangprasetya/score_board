@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:score_board/core/controller/counter_controller.dart';
-import 'package:score_board/core/controller/home_controller.dart';
 import 'package:score_board/core/controller/timer_controller.dart';
 import 'package:score_board/core/service/service.dart';
 import 'package:score_board/utils/colors.dart';
@@ -20,23 +19,27 @@ class SettingController extends GetxController {
   String _localLabelLeftField = "localLabelLeftField";
   String _localIncrementField = "localIncrementField";
   String _localLimitField = "localLimitField";
+  String _localDigitSize = "localDigitSize";
 
   GlobalKey<FormState> keyTextRight = GlobalKey<FormState>();
   GlobalKey<FormState> keyTextLeft = GlobalKey<FormState>();
   GlobalKey<FormState> keyTextIncrement = GlobalKey<FormState>();
   GlobalKey<FormState> keyTextLimit = GlobalKey<FormState>();
 
-  final _indexSwitch = 1.obs;
+  final _indexSwitch = 0.obs;
   final _isLabelBoard = false.obs;
   final _isPositionBoard = false.obs;
   final _isLimitBoard = false.obs;
-  final _isTimerBoard = true.obs;
+  final _isTimerBoard = false.obs;
   final _labelRightBoardColor = Rx<Color>(AppColors.blue);
   final _labelLeftBoardColor = Rx<Color>(AppColors.red);
-  final _textRight = "B".obs;
-  final _textLeft = "A".obs;
-  final _textIncrement = "1".obs;
-  final _textLimit = "10".obs;
+  final _textRight = "".obs;
+  final _textLeft = "".obs;
+  final _textIncrement = "".obs;
+  final _textLimit = "".obs;
+  final _digitSize = 0.0.obs;
+  final _lstDigitSize = [0.0].obs;
+  final _labelDigitSize = "".obs;
 
   bool get isLabelBoard => _isLabelBoard.value;
   bool get isPositionBoard => _isPositionBoard.value;
@@ -45,11 +48,13 @@ class SettingController extends GetxController {
   Color get labelLeftBoardColor => _labelLeftBoardColor.value;
   Color get labelRightBoardColor => _labelRightBoardColor.value;
   int get indexSwitch => _indexSwitch.value;
-
   String get textRight => _textRight.value;
   String get textLeft => _textLeft.value;
   String get textIncrement => _textIncrement.value;
   String get textLimit => _textLimit.value;
+  double get digitSize => _digitSize.value;
+  List<double> get lstDigitSize => _lstDigitSize;
+  String get labelDigitSize => _labelDigitSize.value;
 
   void setLabelBoard(bool value) => _setLabelBoard(value);
   void setPositionBoard(bool value) => _setPositionBoard(value);
@@ -57,11 +62,11 @@ class SettingController extends GetxController {
   void setTimerBoard(bool value) => _setTimerBoard(value);
   void setColorBoard(Color color) => _setColorBoard(color);
   void setIndexSwitch(int index) => _setIndexSwitch(index);
-
   void setTextRight(String value) => _setTextRight(value);
   void setTextLeft(String value) => _setTextLeft(value);
   void setTextIncrement(String value) => _setTextIncrement(value);
   void setTextLimit(String value) => _setTextLimit(value);
+  void setDigitSize(double value) => _setDigitSize(value);
 
   void resetAll() => _resetAll();
 
@@ -153,7 +158,7 @@ class SettingController extends GetxController {
       case 0:
         Get.updateLocale(Locale('en', 'EN'));
         break;
-        
+
       case 1:
         Get.updateLocale(Locale('id', 'ID'));
         break;
@@ -161,8 +166,24 @@ class SettingController extends GetxController {
     _indexSwitch.value = index;
   }
 
+  void _setDigitSize(double value) {
+    if (value == 0.0) {
+      _labelDigitSize.value = "small";
+      _lstDigitSize.value = [150, 110, 80];
+    } else if (value == 50.0) {
+      _labelDigitSize.value = "default";
+      _lstDigitSize.value = [180, 110, 80];
+    } else {
+      _labelDigitSize.value = "large";
+      _lstDigitSize.value = [200, 110, 80];
+    }
+    _digitSize.value = value;
+    _service.setDouble(_localDigitSize, _digitSize.value);
+    update();
+  }
+
   void _initLocalization() {
-    switch ( Get.deviceLocale.languageCode) {
+    switch (Get.deviceLocale.languageCode) {
       case 'en':
         Get.updateLocale(Locale('en', 'EN'));
         _indexSwitch.value = 0;
@@ -179,7 +200,7 @@ class SettingController extends GetxController {
   void _resetAll() {
     TimerController.to.reset();
     CounterController.to.reset();
-    HomeController.to.setIsWinner(false);
+    CounterController.to.setIsWinner(false);
 
     _isLabelBoard.value = false;
     _isPositionBoard.value = false;
@@ -191,6 +212,9 @@ class SettingController extends GetxController {
     _textLeft.value = "A";
     _textIncrement.value = "1";
     _textLimit.value = "10";
+    _digitSize.value = 50.0;
+    _setDigitSize(_digitSize.value);
+
     _service.setBool(_localIsLabelBoard, _isLabelBoard.value);
     _service.setBool(_localIsPositionBoard, _isPositionBoard.value);
     _service.setBool(_localIsLimitBoard, _isLimitBoard.value);
@@ -203,9 +227,27 @@ class SettingController extends GetxController {
     _service.setString(_localLabelLeftField, _textLeft.value);
     _service.setString(_localIncrementField, _textIncrement.value);
     _service.setString(_localLimitField, _textLimit.value);
+    _service.setString(_localLimitField, _textLimit.value);
+    _service.setDouble(_localDigitSize, _digitSize.value);
+
+    update();
   }
 
   Future<void> _initLocal() async {
+    _indexSwitch.value = 1;
+    _isLabelBoard.value = false;
+    _isPositionBoard.value = false;
+    _isLimitBoard.value = false;
+    _isTimerBoard.value = true;
+    _labelRightBoardColor.value = AppColors.blue;
+    _labelLeftBoardColor.value = AppColors.red;
+    _textRight.value = "B";
+    _textLeft.value = "A";
+    _textIncrement.value = "1";
+    _textLimit.value = "10";
+    _digitSize.value = 50.0;
+    _setDigitSize(_digitSize.value);
+
     final isLabel = await _service.getBool(_localIsLabelBoard);
     final isPosition = await _service.getBool(_localIsPositionBoard);
     final isLimit = await _service.getBool(_localIsLimitBoard);
@@ -216,6 +258,7 @@ class SettingController extends GetxController {
     final fieldLeft = await _service.getString(_localLabelLeftField);
     final increment = await _service.getString(_localIncrementField);
     final limit = await _service.getString(_localLimitField);
+    final digitSize = await _service.getDouble(_localDigitSize);
 
     _setBoolInitLocal(_localIsLabelBoard, _isLabelBoard, isLabel);
     _setBoolInitLocal(_localIsPositionBoard, _isPositionBoard, isPosition);
@@ -229,6 +272,7 @@ class SettingController extends GetxController {
     _setStringInitLocal(_localLabelLeftField, _textLeft, fieldLeft);
     _setStringInitLocal(_localIncrementField, _textIncrement, increment);
     _setStringInitLocal(_localLimitField, _textLimit, limit);
+    _setDoubleInitLocal(_localDigitSize, _digitSize, digitSize);
   }
 
   void _setBoolInitLocal(String key, RxBool initValue, bool onLocal) {
@@ -244,6 +288,14 @@ class SettingController extends GetxController {
       _service.setInt(key, initValue.value.value);
     } else {
       initValue.value = Color(onLocal);
+    }
+  }
+
+  void _setDoubleInitLocal(String key, Rx<double> initValue, double onLocal) {
+    if (onLocal == null) {
+      _service.setDouble(key, initValue.value);
+    } else {
+      initValue.value = onLocal;
     }
   }
 

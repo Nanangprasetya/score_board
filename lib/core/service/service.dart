@@ -62,6 +62,23 @@ class LocalStorageService {
     }
   }
 
+  Future<void> setDouble(String key, double value) async {
+    await getSharedPreferences();
+    _prefs.setDouble(key, value);
+  }
+
+  Future<double> getDouble(String key) async {
+    try {
+      await getSharedPreferences();
+
+      final data = _prefs.getDouble(key);
+      return data;
+    } catch (e) {
+      print(e);
+      return 0.0;
+    }
+  }
+
   Future<bool> remove(String key) async {
     await getSharedPreferences();
 

@@ -24,7 +24,7 @@ class AppColors {
   static const Color transparent = Colors.transparent;
   static const Color disable = Color(0xFFE3E3E3);
   static const Color line = Color(0xFFDEDEDE);
-  static const Color label = Color(0xFF808084);
+  static const Color label = Color(0xFF38383A);
   static const Color keyBoard = Color(0xFFEAF8FD);
   static const Color uploadBg = Color(0xFFDFF0FD);
 }

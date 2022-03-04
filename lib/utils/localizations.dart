@@ -21,6 +21,10 @@ class AppLocalizations extends Translations {
           'limit.max': 'Limit Maksimal',
           'timer': 'Timer Waktu',
           'change.language': 'Ubah Bahasa',
+          'digit.size': 'Ukuran Angka',
+          'small': 'Kecil',
+          'default': 'Default',
+          'large': 'Besar',
         },
         'en_US': {
           'win.text': 'Winner Announcement',
@@ -39,6 +43,10 @@ class AppLocalizations extends Translations {
           'limit.max': 'Maximum Limit',
           'timer': 'Timer',
           'change.language': 'Change Language',
+          'digit.size': 'Digit Size',
+          'small': 'Small',
+          'default': 'Default',
+          'large': 'Large',
         }
       };
 }

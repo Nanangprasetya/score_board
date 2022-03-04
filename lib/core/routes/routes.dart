@@ -8,7 +8,7 @@ final List<GetPage> routes = [
   GetPage(
     name: '/',
     page: () => HomePage(),
-    bindings: [HomeBindings(), SettingBindings()],
+    binding: HomeBindings(),
   ),
   GetPage(
     name: '/settingPage',
