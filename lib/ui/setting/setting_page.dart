@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:score_board/core/controller/ads_controller.dart';
 import 'package:score_board/core/controller/setting_controller.dart';
@@ -19,6 +18,7 @@ class SettingPage extends GetView<SettingController> {
     SizeConfig().init(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text("setting".tr),
@@ -103,6 +103,7 @@ class SettingPage extends GetView<SettingController> {
                                         child: Form(
                                           key: controller.keyTextLeft,
                                           child: TextFormField(
+                                            focusNode: controller.fnTextLeft,
                                             initialValue: controller.textLeft,
                                             autovalidateMode:
                                                 AutovalidateMode.always,
@@ -165,6 +166,7 @@ class SettingPage extends GetView<SettingController> {
                                         child: Form(
                                           key: controller.keyTextRight,
                                           child: TextFormField(
+                                            focusNode: controller.fnTextRight,
                                             initialValue: controller.textRight,
                                             autovalidateMode:
                                                 AutovalidateMode.always,
@@ -230,7 +232,7 @@ class SettingPage extends GetView<SettingController> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             child: SizedBox(
-                              width: SizeConfig.screenWidth / 4,
+                              width: SizeConfig.widthMultiplier * 24,
                               child: Wrap(
                                 children: ColorBoard.listColorBoard.map((e) {
                                   return InkWell(
@@ -298,6 +300,7 @@ class SettingPage extends GetView<SettingController> {
             child: LabelTriangle(
               color: AppColors.label,
               child: Image.asset(AppImages.label_ads),
+              onTap: () => Get.toNamed("/purchasePage"),
             ),
           ),
           Positioned(
@@ -329,6 +332,7 @@ Widget _rightBody(SettingController controller) {
               child: Form(
                 key: controller.keyTextIncrement,
                 child: TextFormField(
+                  focusNode: controller.fnTextIncrement,
                   initialValue: controller.textIncrement,
                   autovalidateMode: AutovalidateMode.always,
                   autocorrect: true,
@@ -345,6 +349,9 @@ Widget _rightBody(SettingController controller) {
                   validator: (i) {
                     if (i.isEmpty) {
                       return "empty.value".tr;
+                    }
+                    if (i == "0") {
+                      return "zero.value".tr;
                     }
                     if (i.length > FieldLength.maxIncrement) {
                       return "max".tr + "${FieldLength.maxIncrement}";
@@ -384,6 +391,7 @@ Widget _rightBody(SettingController controller) {
                       child: Form(
                         key: controller.keyTextLimit,
                         child: TextFormField(
+                          focusNode: controller.fnTextLimit,
                           initialValue: controller.textLimit,
                           autovalidateMode: AutovalidateMode.always,
                           autocorrect: true,

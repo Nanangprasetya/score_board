@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:score_board/core/config/environment.dart';
 import 'package:score_board/core/config/production.dart';
 import 'package:score_board/core/routes/routes.dart';
+import 'package:score_board/utils/colors.dart';
 import 'package:score_board/utils/localizations.dart';
 
 void main() {
@@ -13,24 +14,29 @@ void main() {
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Score Board',
-      translations: AppLocalizations(),
-      supportedLocales: [Locale('id', ''), Locale('en', '')],
-      locale: Get.deviceLocale,
-      fallbackLocale: const Locale('en', 'US'),
-      localizationsDelegates: [
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate
-      ],
-      theme: ThemeData(
-        primaryColor: Colors.black,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: GetMaterialApp(
+        title: 'Score Board',
+        translations: AppLocalizations(),
+        supportedLocales: [Locale('id', ''), Locale('en', '')],
+        locale: Get.deviceLocale,
+        fallbackLocale: const Locale('en', 'US'),
+        localizationsDelegates: [
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate
+        ],
+        theme: ThemeData(
+          primaryColor: AppColors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        debugShowCheckedModeBanner: Environment.value.debug,
+        initialRoute: '/',
+        getPages: routes,
       ),
-      debugShowCheckedModeBanner: Environment.value.debug,
-      initialRoute: '/',
-      getPages: routes,
     );
   }
 }

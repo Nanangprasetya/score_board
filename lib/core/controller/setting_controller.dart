@@ -25,6 +25,10 @@ class SettingController extends GetxController {
   GlobalKey<FormState> keyTextLeft = GlobalKey<FormState>();
   GlobalKey<FormState> keyTextIncrement = GlobalKey<FormState>();
   GlobalKey<FormState> keyTextLimit = GlobalKey<FormState>();
+  FocusNode fnTextRight = FocusNode();
+  FocusNode fnTextLeft = FocusNode();
+  FocusNode fnTextIncrement = FocusNode();
+  FocusNode fnTextLimit = FocusNode();
 
   final _indexSwitch = 0.obs;
   final _isLabelBoard = false.obs;
@@ -75,6 +79,15 @@ class SettingController extends GetxController {
     _initLocalization();
     _initLocal();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    fnTextRight = FocusNode();
+    fnTextLeft = FocusNode();
+    fnTextIncrement = FocusNode();
+    fnTextLimit = FocusNode();
+    super.onClose();
   }
 
   void _setLabelBoard(bool value) {
@@ -172,10 +185,10 @@ class SettingController extends GetxController {
       _lstDigitSize.value = [150, 110, 80];
     } else if (value == 50.0) {
       _labelDigitSize.value = "default";
-      _lstDigitSize.value = [180, 110, 80];
+      _lstDigitSize.value = [180, 120, 80];
     } else {
       _labelDigitSize.value = "large";
-      _lstDigitSize.value = [200, 110, 80];
+      _lstDigitSize.value = [200, 140, 80];
     }
     _digitSize.value = value;
     _service.setDouble(_localDigitSize, _digitSize.value);

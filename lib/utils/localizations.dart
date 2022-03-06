@@ -25,6 +25,11 @@ class AppLocalizations extends Translations {
           'small': 'Kecil',
           'default': 'Default',
           'large': 'Besar',
+          'restore': 'Pulihkan Pembayaran',
+          'title.ads': 'Versi Bebas Iklan',
+          'msg.ads': 'Hapus semua iklan dari aplikasi ini.',
+          'buy.now': 'Beli Sekarang',
+          'zero.value': 'Lebih dari 0',
         },
         'en_US': {
           'win.text': 'Winner Announcement',
@@ -47,6 +52,11 @@ class AppLocalizations extends Translations {
           'small': 'Small',
           'default': 'Default',
           'large': 'Large',
+          'restore': 'Restore Purchase',
+          'title.ads': 'Ad Free Version',
+          'msg.ads': 'Remove all advertisements form this app.',
+          'buy.now': 'Buy Now',
+          'zero.value': 'More then 0',
         }
       };
 }

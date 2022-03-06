@@ -31,6 +31,7 @@ dependencies:
   shared_preferences: ^2.0.13
   auto_size_text: ^3.0.0
   google_mobile_ads: ^1.1.0
+  in_app_purchase: ^3.0.1
   yaml: ^3.1.0
   
 dev_dependencies:

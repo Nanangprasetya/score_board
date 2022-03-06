@@ -292,45 +292,48 @@ class HomePage extends GetView<CounterController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(width: 52),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 80,
-                          child: TextButton(
-                            onPressed: () => TimerController.to.start(),
-                            child: Text(
-                              "start".tr,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal,
+                    Visibility(
+                      visible: SettingController.to.isTimerBoard,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 80,
+                            child: TextButton(
+                              onPressed: () => TimerController.to.start(),
+                              child: Text(
+                                "start".tr,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                          child: VerticalDivider(
-                            color: Colors.white,
-                            width: 0,
-                            thickness: 1,
+                          SizedBox(
+                            height: 24,
+                            child: VerticalDivider(
+                              color: Colors.white,
+                              width: 0,
+                              thickness: 1,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 80,
-                          child: TextButton(
-                            onPressed: () => TimerController.to.stop(),
-                            child: Text(
-                              "stop".tr,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal,
+                          SizedBox(
+                            width: 80,
+                            child: TextButton(
+                              onPressed: () => TimerController.to.stop(),
+                              child: Text(
+                                "stop".tr,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(
                       width: 52,
@@ -398,6 +401,7 @@ class HomePage extends GetView<CounterController> {
             child: LabelTriangle(
               color: AppColors.label,
               child: Image.asset(AppImages.label_ads),
+              onTap: () => Get.toNamed("/purchasePage"),
             ),
           ),
         ],
