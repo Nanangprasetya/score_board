@@ -1,6 +1,4 @@
-<p style="height: 100px; width:100px;  display: block;
-  margin-left: auto;
-  margin-right: auto;">
+<p align="center">
     <img src="https://drive.google.com/uc?export=view&id=1d7zLLek0yAtbLmUtZB_x5Oac5c8IjGT2">
 </p>
 
@@ -28,9 +26,10 @@ A scoreboard that can be used for almost all types of sports, intended for conve
 * Share with invitation code
 * Notification Realtime Counter
 
-## Download Aplication
+## Download Application
 
 **Platform Android**
+
 Open Google drive and download `.._armeabi.apk`
 
 [![Digital Score Board Android](https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Drive_icon_%282020%29.svg/100px-Google_Drive_icon_%282020%29.svg.png)](https://drive.google.com/file/d/13cD2RccWDLSoGRblQZ-H7sZbG8TPtGiS/view?usp=sharing)
