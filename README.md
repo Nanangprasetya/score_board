@@ -1,3 +1,9 @@
+<p style="height: 100px; width:100px;  display: block;
+  margin-left: auto;
+  margin-right: auto;">
+    <img src="https://drive.google.com/uc?export=view&id=1d7zLLek0yAtbLmUtZB_x5Oac5c8IjGT2">
+</p>
+
 # Digital Score Board (Papan Skor)
 
 A scoreboard that can be used for almost all types of sports, intended for convenience and practicality makes the design of this scoreboard very compact and easy to carry everywhere.
@@ -31,7 +37,7 @@ Open Google drive and download `.._armeabi.apk`
 
 ## User Interface
 
-![UI Digital Score Board](https://firebasestorage.googleapis.com/v0/b/playing-card-87e5d.appspot.com/o/Digital%20Score%20Board%2Fui_score_board.gif?alt=media&token=9dcfdda9-c8d9-4621-8ba3-04585968379f)
+![UI Digital Score Board](https://drive.google.com/uc?export=view&id=1atPTx8vXy15wS-tUKxu7RbZHgMiFs7Fp)
 
 ## Getting Started
 
