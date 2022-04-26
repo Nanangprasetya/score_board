@@ -40,6 +40,7 @@ class AdsController extends GetxController {
   @override
   void onInit() {
     if(Environment.value.debug) {
+      //! init ads (Development) default is [false]
       _hasAds.value = false;
     }
     super.onInit();

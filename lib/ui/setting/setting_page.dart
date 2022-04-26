@@ -27,7 +27,7 @@ class SettingPage extends GetView<SettingController> {
             builder: (adsController) {
               return TextButton(
                 onPressed: () {
-                  //TODO add delay duration 1 second because rewardedAd need time to load.
+                  //! add delay duration 1 second because rewardedAd need time to load.
                   Future.delayed(Duration(seconds: 6))
                       .then((value) => adsController.showRewardedAd());
                   controller.resetAll();
