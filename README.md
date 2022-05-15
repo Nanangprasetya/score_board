@@ -9,7 +9,7 @@ A scoreboard that can be used for almost all types of sports, intended for conve
 ## Features
 
 * Banner Ads and Reward Ads
-* In App Purchase `On Progress`
+* In App Purchase
 * Count Down / Count Up
 * Stopwatch
 * Running Text
@@ -36,7 +36,13 @@ Open Google drive and download `.._armeabi.apk`
 
 ## User Interface
 
-![UI Digital Score Board](https://drive.google.com/uc?export=view&id=1atPTx8vXy15wS-tUKxu7RbZHgMiFs7Fp)
+Main Board             |  Edit Board
+:-------------------------:|:-------------------------:
+![Main Board](https://drive.google.com/uc?export=view&id=1nsQc6ti6rfYDMDdhGn9luR2ERF2WkYFK)  |  ![Edit Board](https://drive.google.com/uc?export=view&id=1JbYGgNkpuLZwBaFCNr3tWXaMTnNwVUyc)
+
+Setting Board           |  Purchase Board
+:-------------------------:|:-------------------------:
+![Setting Board](https://drive.google.com/uc?export=view&id=14Fm1ODXTmgA9nDavIvyfsX04_iNOSg09)  |  ![Purchase Board](https://drive.google.com/uc?export=view&id=12v7PoTQbN13Alzow2XuzDJCf1vMTjtWh)
 
 ## Getting Started
 
